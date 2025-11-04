@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <mat-toolbar class="w-full elevated py-2">
       <div class="max-w-[1200px] mx-auto w-full flex items-center justify-between">
-        <a routerLink="/products">Modern Store</a>
+        <a routerLink="/products/all">Modern Store</a>
         <app-header-actions/>
       </div>
     </mat-toolbar>
