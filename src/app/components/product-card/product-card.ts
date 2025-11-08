@@ -1,6 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { Product } from '../../models/product';
-import { MatAnchor } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton } from '@angular/material/button';
 
@@ -8,8 +7,11 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-product-card',
   imports: [MatButton, MatIcon],
   template: `
-    <div class="bg-white cursor-pointer rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
+    <div class="relative bg-white cursor-pointer rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
       <img [src]="product().imageUrl" class="w-full h-[300px] object-cover rounded-t-xl" />
+
+      <ng-content />
+
       <div class="p-6 flex flex-col flex-1">
         <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight">
           {{ product().name }}
