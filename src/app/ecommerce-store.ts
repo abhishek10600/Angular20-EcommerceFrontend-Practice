@@ -3,12 +3,14 @@ import { Product } from "./models/product";
 import { patchState, signalMethod, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { produce } from "immer";
 import { Toaster } from "./services/toaster";
+import { CartItem } from "./models/cart";
 
 export type EcommerceState = {
     products: Product[];
     category: string;
     categories: string[];
     wishListItems: Product[];
+    cartItems: CartItem[];
 
 }
 
@@ -80,11 +82,12 @@ export const EcommerceStore = signalStore(
   ],
   category: "all",
   categories: ["all", "electronics", "outdoors", "furniture", "home & office"],
-  wishListItems: []
+  wishListItems: [],
+  cartItems: []
     } as EcommerceState),
 
     
-    withComputed(({category, products, wishListItems}) => ({
+    withComputed(({category, products, wishListItems, cartItems}) => ({
 
         filteredProducts: computed(() => {
             if(category() === "all"){
@@ -96,6 +99,10 @@ export const EcommerceStore = signalStore(
 
         wishListCount: computed(()=> {
             return wishListItems().length
+        }),
+
+        cartCount: computed(()=> {
+          return cartItems().length
         })
     })),
 
@@ -127,6 +134,33 @@ export const EcommerceStore = signalStore(
             patchState(store, {
                 wishListItems: []
             })
+        },
+
+        addToCart: (product: Product, quantity = 1)=>{
+          const existingItemIndex = store.cartItems().findIndex(i => i.product.id === product.id);
+
+          const updatedCartItems = produce(store.cartItems(), (draft)=> {
+            if(existingItemIndex !== -1){
+              draft[existingItemIndex].quantity += quantity;
+              return;
+            }
+
+            draft.push({product, quantity})
+          });
+
+          patchState(store, { cartItems: updatedCartItems })
+          toaster.success(existingItemIndex !== -1 ? "Product added to the cart again" : "Product added to the cart successfully");
+        },
+
+        setItemQuantity: (params: { productId: string, quantity: number})=>{
+          const index = store.cartItems().findIndex(c => c.product.id === params.productId);
+          const updated = produce(store.cartItems(), (draft) => {
+            draft[index].quantity = params.quantity
+          });
+
+          patchState(store, { cartItems: updated })
         }
+
+
     })) 
 );

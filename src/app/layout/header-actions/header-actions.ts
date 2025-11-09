@@ -13,7 +13,7 @@ import { EcommerceStore } from '../../ecommerce-store';
       <button matIconButton routerLink="/wishlist" [matBadge]="store.wishListCount()" [matBadgeHidden]="store.wishListCount() === 0">
         <mat-icon>favorite</mat-icon>
       </button>
-      <button matIconButton>
+      <button routerLink="/cart" matIconButton [matBadge]="store.cartCount()" [matBadgeHidden]="store.cartCount() === 0">
         <mat-icon>shopping_cart</mat-icon>
       </button>
       <button matButton>Sign In</button>
