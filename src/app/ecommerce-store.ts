@@ -159,6 +159,35 @@ export const EcommerceStore = signalStore(
           });
 
           patchState(store, { cartItems: updated })
+        },
+
+        addAllWishlistToCart: ()=>{
+          const updateCartItems = produce(store.cartItems(), (draft)=> {
+            store.wishListItems().forEach(p => {
+              if(!draft.find(c => c.product.id === p.id)){
+                draft.push({ product: p, quantity: 1 })
+              }
+            })
+          })
+
+          patchState(store, {cartItems: updateCartItems, wishListItems: []});
+        },
+
+        moveProductToWishlistFromCart: (product: Product)=>{
+          const updatedCartItems = store.cartItems().filter((p=> p.product.id !== product.id));
+          const updatedWishListItems = produce(store.wishListItems(), (draft)=> {
+            if(!draft.find(p => p.id === product.id)){
+              draft.push(product)
+            }
+          })
+
+          patchState(store, {cartItems: updatedCartItems, wishListItems: updatedWishListItems});
+        },
+
+        removeFromCart: (product: Product)=> {
+          patchState(store, {cartItems: store.cartItems().filter(c => c.product.id !== product.id)
+
+          });
         }
 
 

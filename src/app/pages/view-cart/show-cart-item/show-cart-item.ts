@@ -25,10 +25,10 @@ import { MatIcon } from '@angular/material/icon';
         </div>
 
         <div class="flex -me-3">
-          <button matIconButton (click)="store.addToWishList(item().product)">
+          <button matIconButton (click)="store.moveProductToWishlistFromCart(item().product)">
             <mat-icon>favorite_border</mat-icon>
           </button>
-          <button matIconButton class="danger">
+          <button matIconButton class="danger" (click)="store.removeFromCart(item().product)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
